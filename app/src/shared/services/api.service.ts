@@ -188,8 +188,8 @@ export class ApiService {
 }
 
 // Create singleton instance
-const apiBaseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1'
+import { appConfig } from '../config/env'
 
 export const apiService = new ApiService({
-  baseURL: apiBaseURL
+  baseURL: appConfig.apiUrl
 })

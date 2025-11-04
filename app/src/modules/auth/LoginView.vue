@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import {
   IonPage,
   IonHeader,
@@ -66,23 +66,33 @@ import {
   IonButton
 } from '@ionic/vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from './auth.store'
 
 const router = useRouter()
+const authStore = useAuthStore()
 
 const email = ref('')
 const password = ref('')
-const isLoading = ref(false)
+
+const isLoading = computed(() => authStore.isLoading)
 
 const handleLogin = async () => {
-  // TODO: Implement authentication logic
-  console.log('Logging in with:', email.value)
-  isLoading.value = true
+  if (!email.value || !password.value) {
+    return
+  }
 
-  // Simulate login
-  setTimeout(() => {
-    isLoading.value = false
+  try {
+    await authStore.signIn({
+      email: email.value,
+      password: password.value
+    })
+
+    // Navigate to scanner on success
     router.push('/scanner')
-  }, 1000)
+  } catch (error) {
+    // Error is already shown by the store via toast
+    console.error('Login failed:', error)
+  }
 }
 </script>
 

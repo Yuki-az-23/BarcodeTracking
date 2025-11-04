@@ -154,12 +154,17 @@ class ErrorHandler {
    * Send error to tracking service
    */
   private sendToErrorTracking(error: AppError, context?: string): void {
-    // TODO: Integrate with Sentry or other error tracking service
-    // Example:
-    // Sentry.captureException(error, {
-    //   tags: { context },
-    //   extra: error.details
-    // })
+    // Import dynamically to avoid circular dependencies
+    import('../services/sentry.service').then(({ sentryService }) => {
+      if (sentryService.isEnabled()) {
+        sentryService.captureException(new Error(error.message), {
+          context,
+          code: error.code,
+          details: error.details,
+          timestamp: error.timestamp
+        })
+      }
+    })
   }
 
   /**

@@ -77,8 +77,8 @@ The API will be running at `http://localhost:3000`
 ```bash
 cd app
 
-# Install dependencies
-npm install
+# Install dependencies (use --legacy-peer-deps due to Sentry compatibility requirements)
+npm install --legacy-peer-deps
 
 # Setup environment variables
 cp .env.example .env
@@ -89,6 +89,8 @@ npm run dev
 ```
 
 The app will be running at `http://localhost:5173`
+
+> **Note**: The `--legacy-peer-deps` flag is required due to exact version requirements between @sentry/capacitor and @sentry/vue packages.
 
 ### 4. Build for Mobile (Optional)
 
